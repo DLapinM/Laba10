@@ -9,13 +9,15 @@ public class MyMethodsForFiles
     {
         List<String> rezStrings = new ArrayList<>();
 
+        BufferedReader reader = null;
+
         try
         {
             File file = new File(filePath);
 
             FileReader fr = new FileReader(file);
 
-            BufferedReader reader = new BufferedReader(fr);
+            reader = new BufferedReader(fr);
 
             String line = reader.readLine();
 
@@ -33,6 +35,17 @@ public class MyMethodsForFiles
         catch (IOException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(reader != null) reader.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
 
         return rezStrings;
@@ -54,13 +67,31 @@ public class MyMethodsForFiles
     {
         if(text != "" && text != null)
         {
-            try(FileWriter writer = new FileWriter(filePath, isNotReWrite))
+
+            FileWriter writer = null;
+
+            try
             {
+                writer = new FileWriter(filePath, isNotReWrite);
                 writer.write(text + System.lineSeparator());
             }
             catch(IOException ex)
             {
                 System.out.println(ex.getMessage());
+            }
+            finally
+            {
+                try
+                {
+                    if (writer != null)
+                    {
+                        writer.close();
+                    }
+                }
+                catch(IOException ex)
+                {
+                    System.out.println(ex.getMessage());
+                }
             }
         }
     }
